@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="jquery-1.8.3.min.js"></script>
+</head>
+<body>
+
+
+	<style>
+	body{ background:rgba(120,40,130,.4);transition:2s all;}
+	.piano-keyboard{float:left;-webkit-persepective:1000;persepective:1000; }
+	.sup{ width:300px;height:50px;background:white;-webkit-transition:2s all;transition:1s all;margin-top:5px;transform-origin:left center;-webkit-border-radius:5px;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;}
+	.black-key{
+		position: absolute;
+		width:200px;
+		height:36px;
+		-webkit-border-radius:5px;
+		background:black;
+		z-index:2;
+		opacity: .96;
+		transform-origin:left center;
+		margin-top:-15px;
+		transition:1s all;
+	}
+	.black-key:hover{-webkit-transform:rotate(30deg);transform:rotateY(-18deg);background:blue;}
+	
+	.sup:hover{	-webkit-transform:rotate(30deg);transform:rotateY(-23deg);background:orange;}
+
+	.piano{ margin-left:340px;box-shadow:0px 0px 10px 10px rgba(244,234,244,1);border-radius:5px;background:black;}
+	.piano .musicIcon{ position:absolute;bottome:-70px; cursor:pointer;background:url(musicIcon.png)no-repeat;width:70px;height:70px;-webkit-animation:slideIn 5s forwards;}
+	@-webkit-keyframes slideIn{
+		0%{ bottom:-70px;margin-left:100px;transform:rotate(0deg);}
+		15%{ bottom:60px;margin-left:20px;transform:rotate(30deg);}
+		30%{ bottom:160px;margin-left:100px;transform:rotate(-30deg);}
+		45%{ bottom:230px;margin-left:20px;transform:rotate(30deg);}
+		60%{ bottom:300px;margin-left:100px;transform:rotate(-30deg);}
+		75%{ bottom:390px;margin-left:20px;transform:rotate(30deg);}
+		90%{ bottom:470px;margin-left:100px;transform:rotate(-30deg);}
+		100%{ bottom:80%;margin-left:20px;transform:rotate(0);background:url(musicBtn.png)}
+	}
+	audio{width:0;height:0;}
+
+	</style>
+	<audio controls id="sound" loop>
+		<source src="sound/River Flows In You.mp3" type="audio/ogg">
+	</audio>
+	<audio class="sup1 sound" src="sound/1++.ogg"></audio>
+	<audio class="sup2 sound" src="sound/2++.ogg"></audio>
+	<audio class="sup3 sound" src="sound/3++.ogg"></audio>
+	<audio class="sup4 sound" src="sound/4++.ogg"></audio>
+	<audio class="sup5 sound" src="sound/5++.ogg"></audio>
+	<audio class="sup6 sound" src="sound/6++.ogg"></audio>
+	<audio class="sup7 sound" src="sound/7++.ogg"></audio>
+	<audio class="sup8 sound" src="sound/8++.ogg"></audio>
+			
+	<div class="piano-keyboard">
+		<div class='sup' id='sup1'></div>
+			<div class="black-key"></div>
+		<div class='sup' id='sup2'></div>
+			<div class="black-key"></div>
+		<div class='sup' id='sup3'></div>
+		<div class='sup' id='sup4'></div>
+			<div class="black-key "></div>
+		<div class='sup' id='sup5'></div>
+			<div class="black-key "></div>
+		<div class='sup' id='sup6'></div>
+			<div class="black-key "></div>
+		<div class='sup' id='sup7'></div>
+		<div class='sup' id='sup8'></div>
+			<div class="black-key "></div>
+		<div class='sup' id='sup9'></div>
+			<div class="black-key "></div>
+		<div class='sup' id='sup10'></div>
+	</div>
+
+	<div class="piano">
+		<span class="musicIcon"></span>
+		<img src="234945-1306011RJ097.jpg">
+	</div>
+
+	
+<script>
+	var sups = document.getElementsByClassName('sup');
+	var blackKeys =document.getElementsByClassName('blackKeys');
+	var body =document.getElementsByTagName('body')[0];
+	var sound = document.getElementById('sound');
+	var count;
+	var isPlaying;
+	var sounds = document.getElementsByClassName('sound');
+	var musicIcon = document.getElementsByClassName('musicIcon')[0];
+	// for(var i=0;i<sups.length;i++){
+	// 	sups[i].onclick = function(){
+
+	// 	}
+	// }
+
+	// body.onclick=function(){
+	// 	sound.play();
+	//}
+	var body = $("body").eq(0);
+	body.delegate(".sup",'click',function(){	
+		if(isPlaying) return false;
+		switch(this.id){
+			case "sup1":
+				makeSound(0,this.id);break;
+			case "sup2":
+				makeSound(1,this.id);break;
+			case "sup3":
+				makeSound(2,this.id);break;
+			case "sup4":
+				makeSound(3,this.id);break;
+			case "sup5":
+				makeSound(4,this.id);break;
+			case "sup6":
+				makeSound(5,this.id);break;
+			case "sup7":
+				makeSound(6,this.id);break;
+			case "sup8":
+				makeSound(7,this.id);break;
+		}
+	})
+	// 动画部分JS
+	musicIcon.onclick=function(){
+		if(this.style.opacity==1){
+			this.style.opacity=0.5;
+			isPlaying=true;
+			sound.play();
+
+		}else{
+			this.style.opacity=1;
+			sound.pause();
+			isPlaying=false;
+		}
+		
+	}
+
+	function makeSound(n,id){
+		if(!sounds[n].ended){
+			repeatSound(id);	
+		}	
+		sounds[n].play();	
+	}
+
+	function repeatSound(id){
+		var audio = $('<audio>');
+		var idNumber = id.slice(3);
+		audio.addClass(id);
+		audio.attr("src","sound/"+idNumber+"++.ogg");	
+		body.append(audio);
+		var audioDOM = audio[0];
+		audioDOM.onended=function(){
+			$(this).remove();
+		}
+		audioDOM.play();
+	}
+
+
+</script>
+</body>
+</html>
